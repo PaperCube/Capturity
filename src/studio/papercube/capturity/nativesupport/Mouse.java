@@ -9,55 +9,57 @@ import static java.lang.System.currentTimeMillis;
  */
 public class Mouse {
 
-    private static long lastMove=currentTimeMillis();
-    private static Point lastPoint=location();
-    private static boolean isDetectingEnabled = false;
+    private static long lastMove = currentTimeMillis();
+    private static Point lastPoint = location();
+    private static boolean detectingEnabled = false;
     private static Runnable onMoveMouse;
-    public static Point location(){
+
+    public static Point location() {
         return MouseInfo.getPointerInfo().getLocation();
     }
 
-    public static void setDetectingEnabled(boolean requiredEnable){
-        if (isDetectingEnabled) {
-            isDetectingEnabled=requiredEnable;
-        }else{
-            if(requiredEnable)new MouseDetector();
-            isDetectingEnabled=requiredEnable;
+    public static void setDetectingEnabled(boolean flag) {
+        if (detectingEnabled) {
+            detectingEnabled = flag;
+        } else {
+            if (flag) new MouseDetector();
+            detectingEnabled = flag;
         }
     }
 
     public static void setOnMove(Runnable runnable) {
-        onMoveMouse=runnable;
+        onMoveMouse = runnable;
     }
 
     public static boolean isDetectingEnabled() {
-        return isDetectingEnabled;
+        return detectingEnabled;
     }
 
     public static boolean hasNotMovedForMillis(int millis) {
-        return currentTimeMillis()-lastMove >= millis;
+        return millis >= 0 && currentTimeMillis() - lastMove >= millis;
     }
 
-    private static class MouseDetector{
+    private static class MouseDetector {
         Thread t;
-        MouseDetector(){
+
+        MouseDetector() {
             t = new Thread(this::detectMouse, getClass().getSimpleName());
             t.setDaemon(true);
             t.start();
         }
 
-        private void detectMouse(){
+        private void detectMouse() {
             mainLoop:
-            for(;;) {
-                if(!isDetectingEnabled) break mainLoop;
+            for (; ; ) {
+                if (!detectingEnabled) break mainLoop;
 
                 Point currentPoint = location();
 
                 //如果点发生变更
                 if (!lastPoint.equals(currentPoint)) {
                     lastMove = currentTimeMillis();
-                    lastPoint=currentPoint;
-                    if(onMoveMouse!=null) onMoveMouse.run();
+                    lastPoint = currentPoint;
+                    if (onMoveMouse != null) onMoveMouse.run();
                 }
 
                 try {

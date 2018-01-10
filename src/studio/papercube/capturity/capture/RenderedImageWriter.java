@@ -22,7 +22,12 @@ abstract public class RenderedImageWriter {
     }
 
     public static File nextImageFile(String parentFolder){
-        String absolutePath = String.format("%s\\Capturity Screenshot %s.png", parentFolder, SealedTool.DateFormatter.getCurrent());
-        return new File(absolutePath);
+        return nextImageFile(new File(parentFolder));
+    }
+
+    public static File nextImageFile(File parentDirectory) {
+        File dest = new File(parentDirectory, String.format("Capturity Screenshot %s.png", SealedTool.DateFormatter.getCurrent()));
+        dest.mkdirs();
+        return dest;
     }
 }
