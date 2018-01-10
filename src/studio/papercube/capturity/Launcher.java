@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 
 public class Launcher {
     public static UserInterfaceMain mainwindow;
-    public static int VERSION_CODE = 104;
-    public static String VERSION = "v1.1.0-BETA-20161119";
+    public static int VERSION_CODE = 105;
+    public static String VERSION = "v1.1.1-BETA-20180110";
 
     public static void main(String[] args) {
         ThreadExceptionCatcher.register(Thread.currentThread());
