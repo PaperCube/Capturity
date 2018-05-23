@@ -25,4 +25,8 @@ abstract public class RenderedImageWriter {
         String absolutePath = String.format("%s\\Capturity Screenshot %s.png", parentFolder, SealedTool.DateFormatter.getCurrent());
         return new File(absolutePath);
     }
+
+    public static File nextImageFile(File parentDirectory) {
+        return new File(parentDirectory, String.format("Capturity Screenshot %s.png", SealedTool.DateFormatter.getCurrent()));
+    }
 }
