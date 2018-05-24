@@ -6,14 +6,18 @@ import java.io.IOException;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
  * Created by imzhy on 2016/8/3.
  */
 public class GroupImageWriter extends RenderedImageWriter {
-    public static final Executor executor = Executors.newCachedThreadPool();
+    private static final ExecutorService executor = Executors.newCachedThreadPool();
 
+    public static ExecutorService getSharedExecutorService(){
+        return executor;
+    }
     /**
      * 储存了在写过程中发生的IOException，目前没有用处。
      */

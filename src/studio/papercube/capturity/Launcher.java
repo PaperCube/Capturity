@@ -1,6 +1,6 @@
 package studio.papercube.capturity;
 
-import capturity.capture.CaptureSaver;
+import studio.papercube.capturity.capture.GroupImageWriter;
 import studio.papercube.capturity.exceptionhandling.CatchAllThread;
 import studio.papercube.capturity.exceptionhandling.ThreadExceptionCatcher;
 import studio.papercube.capturity.nativesupport.Environment;
@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 
 public class Launcher {
     public static UserInterfaceMain mainwindow;
-    public static int VERSION_CODE = 104;
-    public static String VERSION = "v1.1.0-BETA-20161119";
+    public static int VERSION_CODE = 105;
+    public static String VERSION = "v1.1.1-BETA-20180110";
 
     public static void main(String[] args) {
         ThreadExceptionCatcher.register(Thread.currentThread());
@@ -33,7 +33,7 @@ public class Launcher {
 
         checkSingle(Launcher::exitWhenSingle);
 
-        launchUIWithComment(args,String.format("Capturity %s - %s",VERSION, VERSION_CODE));
+        launchUIWithComment(args, String.format("Capturity %s - %s", VERSION, VERSION_CODE));
 
         Mouse.setDetectingEnabled(true);
     }
@@ -51,12 +51,12 @@ public class Launcher {
         });
     }
 
-    private static void exitWhenSingle(){
+    private static void exitWhenSingle() {
         JOptionPane.showMessageDialog(null, "你不可以同时运行两个程序");
         exit();
     }
 
-    private static void checkSingle(Runnable r){
+    private static void checkSingle(Runnable r) {
         try {
             if (!SingleInstanceChecker.isSingle()) {
                 r.run();
@@ -66,10 +66,10 @@ public class Launcher {
         }
     }
 
-    private static void shutdownExecutorsAndAwaitForTermination(){
-        CaptureSaver.getExecutor().shutdown();
+    private static void shutdownExecutorsAndAwaitForTermination() {
+        GroupImageWriter.getSharedExecutorService().shutdown();
         try {
-            CaptureSaver.getExecutor().awaitTermination(10, TimeUnit.SECONDS);
+            GroupImageWriter.getSharedExecutorService().awaitTermination(10, TimeUnit.SECONDS);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -79,7 +79,6 @@ public class Launcher {
     public static void exit() {
         new CatchAllThread(Launcher::shutdownExecutorsAndAwaitForTermination).start();
     }
-
 
 
 }

@@ -21,7 +21,7 @@ public class AutoCaptureService {
     private double saveRatio = 1.0;
 
     private boolean isWaitingForNotification = false;
-    Thread t;
+    private Thread t;
 
     public AutoCaptureService() {
         t = new CatchAllThread(this::loop, getClass().getSimpleName());
